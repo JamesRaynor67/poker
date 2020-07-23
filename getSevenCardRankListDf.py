@@ -40,9 +40,9 @@ def getSevenCardRankListDf(fiveCardRankListDf):
         print(end-start)
 
         df = pd.DataFrame()
-        d['id'] = sevenCardIdList
+        df['id'] = sevenCardIdList
         sevenCardIdList = None # High memory is required ahead, make it availble to free memory
-        d['sevenCardRankList'] = sevenCardRankList
+        df['sevenCardRankList'] = sevenCardRankList
         sevenCardRankList = None # High memory is required ahead, make it availble to free memory
         df.set_index('id', inplace=True)
 
