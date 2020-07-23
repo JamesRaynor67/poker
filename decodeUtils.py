@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 def printCards(Cards):
     cardType = ["♠", "♥", "♦", "♣"]
     for card in Cards:

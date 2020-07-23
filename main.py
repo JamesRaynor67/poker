@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import getFiveCardRankListDf as gfcrldf
 import getRankValueDistribution as grvd
 import decodeUtils as du
