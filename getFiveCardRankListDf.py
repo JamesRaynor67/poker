@@ -34,6 +34,7 @@ def getFiveCardRankListDf():
         idList = []
         for fiveCard in deckCards:
             idList.append(fiveCardsToID(fiveCard))
+        df['id'] = idList
         df.set_index('id', inplace=True)
 
         rankValue = 0
