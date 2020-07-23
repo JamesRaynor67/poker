@@ -17,7 +17,7 @@ def getSevenCardRankListDf(fiveCardRankListDf):
     if os.path.exists('sevenCardRankList.csv'):
         print("Reading from sevenCardRankList.csv ...")
         df = pd.read_csv('sevenCardRankList.csv')
-        df = df.set_index('id')
+        df.set_index('id', inplace=True)
         return df
     else:
         print("File sevenCardRankList.csv not found, generating new rank list...This may take a LONG time")
@@ -37,7 +37,7 @@ def getSevenCardRankListDf(fiveCardRankListDf):
         end = time.time()
         print(end-start)
         df = pd.DataFrame(zip(sevenCardIdList, sevenCardRankList), columns =['id','rankValue'])
-        df = df.set_index('id')
+        df.set_index('id', inplace=True)
         df.to_csv('sevenCardRankList.csv')
         return df
 
