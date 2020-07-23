@@ -27,6 +27,14 @@ def decodeSevenCardId(sevenCardId):
     return cardIntList
 
 
+def decodeFiveCardId(fiveCardId):
+    cardIntList = [-1] * 5
+    for i in range(5):
+        cardIntList[i] = (fiveCardId % 52)
+        fiveCardId = fiveCardId // 52
+    return cardIntList
+    
+
 def readableCardsToCardsInt(readAbleCards):
     # cardType = ["♠", "♥", "♦", "♣"]
     # S(pade), H(eart), D(iamond), C(lub)

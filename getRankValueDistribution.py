@@ -56,8 +56,8 @@ def getRankValueDistribution(cardsForSelection, bannedCards, rankDf):
         sevenCards.append(sevenCard)
 
     print(len(sevenCards))
-    if len(sevenCards) > 20000:
-        sampledSevenCards = random.sample(sevenCards, k=20000)
+    if len(sevenCards) > 10000:
+        sampledSevenCards = random.sample(sevenCards, k=10000)
         for sevenCard in sampledSevenCards:
             _, maxCardValue = selectBestFiveOutOfSeven_bySort(sevenCard, rankDf)
             rankValueDistribution.append(maxCardValue)
@@ -69,27 +69,20 @@ def getRankValueDistribution(cardsForSelection, bannedCards, rankDf):
     return rankValueDistribution
 
 
-def printRankValueDistribution(rankValueDistribution, role, enableKde = True, showPlot=True):
+def printRankValueDistribution(rankValueDistribution, role, enableKde = True, ax = None, showPlot=True):
 
     if role == 'opponent':
-        sns.distplot(rankValueDistribution, bins=20, color='r', kde=enableKde)
+        sns.distplot(rankValueDistribution, bins=200, color='r', kde=enableKde)
         plt.xlim([-1, 6170])
     elif role == 'me':
-        sns.distplot(rankValueDistribution, bins=20, color='b', kde=enableKde)
+        sns.distplot(rankValueDistribution, bins=200, color='b', kde=enableKde)
         plt.xlim([-1, 6170])
     elif role == 'baseline':
-        sns.distplot(rankValueDistribution, bins=20, color='g', kde=enableKde)
+        sns.distplot(rankValueDistribution, bins=200, color='g', kde=enableKde)
         plt.xlim([-1, 6170])
 
     if showPlot is True:
         plt.show()
-
-
-def printBaselineRankValueDistribution(rankDf):
-    baselineRankValueList = rankDf['rankValue'].tolist()
-    sns.palplot(sns.light_palette("green"))
-    sns.distplot([v for v in baselineRankValueList if v < 1000], bins=20, label="高牌(NoPair)")
-    sns.distplot([v for v in baselineRankValueList if v >= 1000], bins=20, label="一对(OnePair)")
 
 
 if __name__ == "__main__":

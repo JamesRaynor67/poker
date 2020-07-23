@@ -38,8 +38,14 @@ def getSevenCardRankListDf(fiveCardRankListDf):
             sevenCardRankList.append(rankValue)
         end = time.time()
         print(end-start)
-        df = pd.DataFrame(zip(sevenCardIdList, sevenCardRankList), columns =['id','rankValue'])
+
+        df = pd.DataFrame()
+        d['id'] = sevenCardIdList
+        sevenCardIdList = None # High memory is required ahead, make it availble to free memory
+        d['sevenCardRankList'] = sevenCardRankList
+        sevenCardRankList = None # High memory is required ahead, make it availble to free memory
         df.set_index('id', inplace=True)
+
         df.to_csv('sevenCardRankList.csv')
         return df
 

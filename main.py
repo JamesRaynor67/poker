@@ -29,7 +29,7 @@ def inputACard(promptStr, inputedCards):
 
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":    
     fiveCardsDf = gfcrldf.getFiveCardRankListDf()
     #     cardsForSelectionTest = ["H3", "SK", "D2", "D9", "CJ"]
     # bannedCards = []
@@ -40,7 +40,6 @@ if __name__ == "__main__":
     inputACard("输入第1张底牌。", cardsForSelection)
     inputACard("输入第2张底牌。", cardsForSelection)
 
-    grvd.printBaselineRankValueDistribution(fiveCardsDf)
     rankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection), [], fiveCardsDf)
     # opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt([]), cardsForSelection[0:2], fiveCardsDf) 不确定性太大，需要提前计算
     grvd.printRankValueDistribution(rankValueDistribution, role='me', showPlot=True)
