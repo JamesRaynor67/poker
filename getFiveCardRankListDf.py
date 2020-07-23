@@ -29,13 +29,12 @@ def getFiveCardRankListDf():
         print("fiveCardRankList.csv not found, generating new rank list...")
         deckCards = generateAllDeckCards()
         deckCards.sort(key=functools.cmp_to_key(pcu.compareTwoSuits))
-        df = pd.DataFrame(deckCards, columns =['fiveCards_0','fiveCards_1','fiveCards_2','fiveCards_3','fiveCards_4'])
+        # df = pd.DataFrame(deckCards, columns =['fiveCards_0','fiveCards_1','fiveCards_2','fiveCards_3','fiveCards_4']) #Not necessary if there is id
 
         idList = []
         for fiveCard in deckCards:
             idList.append(fiveCardsToID(fiveCard))
-        df['id'] = idList
-        df.set_index('id', inplace=True)
+        df = pd.DataFrame(idList, columns=['id'])
 
         rankValue = 0
         rankValueList = [0]
