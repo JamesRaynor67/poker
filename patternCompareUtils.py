@@ -269,26 +269,26 @@ def compareTwoSuits(suit1, suit2):
             return 0
 
         
-    straight1, maxCardValue1 = isStraight(suit1)
-    straight2, maxCardValue2 = isStraight(suit2)
+    straight1, maxCardInt1 = isStraight(suit1)
+    straight2, maxCardInt2 = isStraight(suit2)
     if straight1 is True and straight2 is False:
         return -1
     elif straight1 is False and straight2 is True:
         return 1
     elif straight1 is True and straight2 is True:
-        return maxCardValue1 - maxCardValue2
+        return maxCardInt1//4 - maxCardInt2//4 #不应受到花色影响，故除以4后比较
 
     
-    flush1, singleCardList1 = isFlush(countItems1, suit1)
-    flush2, singleCardList2 = isFlush(countItems2, suit2)
+    flush1, singleCardIntList1 = isFlush(countItems1, suit1)
+    flush2, singleCardIntList2 = isFlush(countItems2, suit2)
     if flush1 is True and flush2 is False:
         return -1
     elif flush1 is False and flush2 is True:
         return 1
     elif flush1 is True and flush2 is True:
         for i in range(5):
-            if singleCardList1[i] != singleCardList2[i]:
-                return singleCardList1[i] - singleCardList2[i]
+            if singleCardIntList1[i] != singleCardIntList2[i]:
+                return singleCardIntList1[i]//4 - singleCardIntList2[i]//4 #不应受到花色影响，故除以4后比较
             return 0
 
         
@@ -319,12 +319,11 @@ def compareTwoSuits(suit1, suit2):
             return singleCardValue1 - singleCardValue2
         return 0
     
-    straightFlush1, maxSingleCardValue1 = isStraightFlush(suit1)
-    straightFlush2, maxSingleCardValue2 = isStraightFlush(suit2)
+    straightFlush1, maxSingleCardInt1 = isStraightFlush(suit1)
+    straightFlush2, maxSingleCardInt2 = isStraightFlush(suit2)
     if straightFlush1 is True and straightFlush2 is True:
-        return maxSingleCardValue1 - maxSingleCardValue2
+        return maxSingleCardInt1//4 - maxSingleCardInt2//4
     else:
         # This part should never be arrived
         logging.critical("suit1: " + str(suit1) + " suit2: " + str(suit2))
         exit()
-
