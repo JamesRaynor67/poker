@@ -43,8 +43,11 @@ def printInputedCard(inputedCards):
 
 if __name__ == "__main__":
     bucketSize = 51
-    _, axes = plt.subplots(2, 2, figsize=(7, 7), sharex=True)
+    _, axes = plt.subplots(2, 4, figsize=(21, 7), sharex=True)
+    # _, axes = plt.subplots(2, 4, figsize=(2, 1), sharex=True)
+    # _, axes = plt.subplots(2, 4, sharex=True)
     plt.ion()
+    sns.set(font_scale=0.8)
 
     print(matplotlib.get_backend())
     fiveCardsDf = gfcrldf.getFiveCardRankListDf()
@@ -52,6 +55,7 @@ if __name__ == "__main__":
     # sevenCardsDf = gscrldf.getSevenCardRankListDf(fiveCardsDf)
     # baselineBucketCountDict = gscrldf.getBaselineBucketCountDict(sevenCardsDf, bucketSize)
     baselineBucketCountDict = None
+    resultProbability = None
     cardsForSelection = []
     
     
@@ -63,7 +67,7 @@ if __name__ == "__main__":
     rankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection), [], fiveCardsDf, fiveCardRankDict)
     # opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt([]), cardsForSelection[0:2], fiveCardsDf) 不确定性太大，需要提前计算
     rankValueDistributionDict = {'me':rankValueDistribution}
-    srvd.showRankValueDistribution(rankValueDistributionDict, axes[0,0], bucketSize, baselineBucketCountDict)
+    srvd.showRankValueDistribution(rankValueDistributionDict, axes[0,0], bucketSize, baselineBucketCountDict, resultProbability)
 
 
     # 第二阶段
@@ -77,9 +81,10 @@ if __name__ == "__main__":
     rankValueDistributionDict = {'me':rankValueDistribution, 'opponent':opponentRankValueDistribution}
 
     printInputedCard(cardsForSelection)
-    srvd.showRankValueDistribution(rankValueDistributionDict, axes[0,1], bucketSize, baselineBucketCountDict)
-    print(srvd.getResultProbability(rankValueDistribution, opponentRankValueDistribution))
-
+    resultProbability, myRankValueProbabilityDist, opponentRankValueProbabilityDist = srvd.getResultProbability(rankValueDistribution, opponentRankValueDistribution)
+    print(resultProbability)
+    srvd.showRankValueDistribution(rankValueDistributionDict, axes[0,1], bucketSize, baselineBucketCountDict, resultProbability)
+    srvd.showMaxRankProbability(myRankValueProbabilityDist, opponentRankValueProbabilityDist, axes[1,1])
 
     # 第三阶段
     print("\n接下来输入五张公开牌中的第四张")
@@ -90,8 +95,10 @@ if __name__ == "__main__":
     rankValueDistributionDict = {'me':rankValueDistribution, 'opponent':opponentRankValueDistribution}
 
     printInputedCard(cardsForSelection)
-    srvd.showRankValueDistribution(rankValueDistributionDict, axes[1,0], bucketSize, baselineBucketCountDict)
-    print(srvd.getResultProbability(rankValueDistribution, opponentRankValueDistribution))
+    resultProbability, myRankValueProbabilityDist, opponentRankValueProbabilityDist = srvd.getResultProbability(rankValueDistribution, opponentRankValueDistribution)
+    print(resultProbability)
+    srvd.showRankValueDistribution(rankValueDistributionDict, axes[0,2], bucketSize, baselineBucketCountDict, resultProbability)
+    srvd.showMaxRankProbability(myRankValueProbabilityDist, opponentRankValueProbabilityDist, axes[1,2])
 
 
     # 第四阶段
@@ -103,10 +110,11 @@ if __name__ == "__main__":
     rankValueDistributionDict = {'me':rankValueDistribution, 'opponent':opponentRankValueDistribution}
 
     printInputedCard(cardsForSelection)
-    srvd.showRankValueDistribution(rankValueDistributionDict, axes[1,1], bucketSize, baselineBucketCountDict)
-    print(srvd.getResultProbability(rankValueDistribution, opponentRankValueDistribution))
+    resultProbability, myRankValueProbabilityDist, opponentRankValueProbabilityDist = srvd.getResultProbability(rankValueDistribution, opponentRankValueDistribution)
+    print(resultProbability)
+    srvd.showRankValueDistribution(rankValueDistributionDict, axes[0,3], bucketSize, baselineBucketCountDict, resultProbability)
+    srvd.showMaxRankProbability(myRankValueProbabilityDist, opponentRankValueProbabilityDist, axes[1,3])
 
-    # print("七张牌中可选的的组合中最大的排位为"+str(rankValueDistribution)+"/6191.")
 
     end = False
     while end is False:

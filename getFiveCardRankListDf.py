@@ -49,30 +49,7 @@ def getFiveCardRankListDf():
                 exit()
             rankValueList.append(rankValue)
         df['rankValue'] = rankValueList
-
-        # 也许以下的weekerNumberList， strongerNumberList用不上
-        weekerNumberList = []
-        strongerNumberList = []
-        totalNumber = len(deckCards)
-        weekerNumberCount = 0
-        weekerNumberCountIndex = 0
-        strongerNumberCount = 0
-        strongerNumberCountIndex = 0
-        for index in range(len(rankValueList)):
-            currentFiveCardRankValue = rankValueList[index]
-            while strongerNumberCountIndex < totalNumber and rankValueList[strongerNumberCountIndex] < currentFiveCardRankValue:
-                strongerNumberCountIndex += 1
-            while weekerNumberCountIndex < totalNumber and rankValueList[weekerNumberCountIndex] <= currentFiveCardRankValue:
-                weekerNumberCountIndex += 1
-            weekerNumberList.append(totalNumber-weekerNumberCountIndex)
-            strongerNumberList.append(strongerNumberCountIndex)
-        df['weekerNumber'] = weekerNumberList
-        df['strongerNumber'] = strongerNumberList
         
-        idList = []
-        for fiveCard in deckCards:
-            idList.append(fiveCardsToID(fiveCard))
         df.set_index('id', inplace=True)
-
         df.to_csv('fiveCardRankList.csv')
         return df

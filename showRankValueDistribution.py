@@ -13,7 +13,7 @@ def compareTwoPoints(p1, p2):
         return p1[1] - p2[1]
 
 
-def showRankValueDistribution(rankValueDistributionDict, ax, bucketSize, baselineBucketCountDict):
+def showRankValueDistribution(rankValueDistributionDict, ax, bucketSize, baselineBucketCountDict, resultProbability):
     # bucketSize = 51 # Should be a factor of 6191+1
     colorDict = {'opponent':'r', 'me':'b', 'baseline':'g'}
     eps = 0.005
@@ -69,9 +69,59 @@ def showRankValueDistribution(rankValueDistributionDict, ax, bucketSize, baselin
     sns.lineplot(x="x", y="y", hue="role", estimator=None, data=df, ax=ax)
     ax.set(xlim=(0, 6200))
     ax.set(ylim=(0, y_lim))
+
+    if isinstance(resultProbability, dict) and 'win' in resultProbability and 'draw' in resultProbability and 'loss' in resultProbability:
+        titleStr = 'Win:' + f'{resultProbability["win"]*100:.1f}' + '% ' + \
+            'Draw:' + f'{resultProbability["draw"]*100:.1f}' + '% ' + \
+            'Loss:' + f'{resultProbability["loss"]*100:.1f}' + '%'
+        ax.set_title(titleStr)
+        print(titleStr)
+
     plt.tight_layout()
     plt.show()
     # print(df)
+
+
+def showMaxRankProbability(myRankValueProbabilityDist, opponentRankValueProbabilityDist, ax):
+    # Note that these Dist has been sorted
+    xRankValueList = []
+    yProbabilityList = []
+    roleList = []
+
+    myRankValueProbabilityDistDict = {}
+    for e in myRankValueProbabilityDist:
+        myRankValueProbabilityDistDict[e[0]] = e[1]
+
+    opponentRankValueProbabilityDistDict = {}
+    for e in opponentRankValueProbabilityDist:
+        opponentRankValueProbabilityDistDict[e[0]] = e[1]
+
+
+    accumulateProbability = 0
+    xRankValueList.append(-0.001)
+    yProbabilityList.append(0)
+    for xRankValue in range(6191):
+        xRankValueList.append(xRankValue)
+        if xRankValue in myRankValueProbabilityDistDict:
+            accumulateProbability += myRankValueProbabilityDistDict[xRankValue]
+        yProbabilityList.append(accumulateProbability)
+        roleList.append('me')
+
+    accumulateProbability = 0
+    xRankValueList.append(-0.001)
+    yProbabilityList.append(0)
+    for xRankValue in range(6191):
+        xRankValueList.append(xRankValue)
+        if xRankValue in opponentRankValueProbabilityDistDict:
+            accumulateProbability += opponentRankValueProbabilityDistDict[xRankValue]
+        yProbabilityList.append(accumulateProbability)
+        roleList.append('opponent')
+
+    df = pd.DataFrame(zip(xRankValueList, yProbabilityList, roleList), columns=['x', 'y', 'role'])
+    df.to_csv('debug.csv')
+    sns.lineplot(x="x", y="y", hue="role", estimator=None, data=df, ax=ax)
+    ax.set(xlim=(0, 6200))
+    ax.set(ylim=(0, 1.05))
 
 
 def getResultProbability(myRankValueDistribution, targetRankValueDistribution):
@@ -109,8 +159,8 @@ def getResultProbability(myRankValueDistribution, targetRankValueDistribution):
                 drawRate += targetRank[1]*myRank[1]
             else:
                 winRate += targetRank[1]*myRank[1]
-                
-    return {'winRate':winRate, 'drawRate':drawRate, 'lossRate': 1.0-winRate-drawRate}
+
+    return {'win':winRate, 'draw':drawRate, 'loss': 1.0-winRate-drawRate}, myRankValueProbability, targetRankValueProbability
 
 # _, ax = plt.subplots(2, 2, figsize=(7, 7), sharex=True)
 # #d={'baseline':random.choices(range(3000, 3500),k=5000)}
