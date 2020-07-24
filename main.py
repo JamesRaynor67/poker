@@ -33,6 +33,12 @@ def inputACard(promptStr, inputedCards):
             inputedCards.append(oneCard)
 
 
+def printInputedCard(inputedCards):
+    if len(inputedCards) == 2:
+        print('你输入的底牌为：', inputedCards, '(', du.printUnicodeCards(du.readableCardsToCardsInt(inputedCards)), ')')
+    elif len(inputedCards) > 2:
+        print('你输入的底牌为：', inputedCards[:2], '(', du.printUnicodeCards(du.readableCardsToCardsInt(inputedCards[:2])), ')', ' 桌上的公开牌为：', inputedCards[:2], '(', du.printUnicodeCards(du.readableCardsToCardsInt(inputedCards[2:])), ')')
+
 
 
 if __name__ == "__main__":
@@ -46,8 +52,10 @@ if __name__ == "__main__":
     # sevenCardsDf = gscrldf.getSevenCardRankListDf(fiveCardsDf)
     # baselineBucketCountDict = gscrldf.getBaselineBucketCountDict(sevenCardsDf, bucketSize)
     baselineBucketCountDict = None
-
     cardsForSelection = []
+    
+    
+    # 第一阶段
     print("输入两张你的底牌")
     inputACard("输入第1张底牌。", cardsForSelection)
     inputACard("输入第2张底牌。", cardsForSelection)
@@ -56,9 +64,10 @@ if __name__ == "__main__":
     # opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt([]), cardsForSelection[0:2], fiveCardsDf) 不确定性太大，需要提前计算
     rankValueDistributionDict = {'me':rankValueDistribution}
     srvd.showRankValueDistribution(rankValueDistributionDict, axes[0,0], bucketSize, baselineBucketCountDict)
-    # grvd.printRankValueDistribution(opponentRankValueDistribution, opponent=True, showPlot=True)
 
-    print("接下来输入五张公开牌中的前三张")
+
+    # 第二阶段
+    print("\n接下来输入五张公开牌中的前三张")
     inputACard("首先输入第1张公开牌。", cardsForSelection)
     inputACard("首先输入第2张公开牌。", cardsForSelection)
     inputACard("首先输入第3张公开牌。", cardsForSelection)
@@ -66,28 +75,38 @@ if __name__ == "__main__":
     rankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection), [], fiveCardsDf, fiveCardRankDict)
     opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection[2:]), cardsForSelection[0:2], fiveCardsDf, fiveCardRankDict)
     rankValueDistributionDict = {'me':rankValueDistribution, 'opponent':opponentRankValueDistribution}
+
+    printInputedCard(cardsForSelection)
     srvd.showRankValueDistribution(rankValueDistributionDict, axes[0,1], bucketSize, baselineBucketCountDict)
     print(srvd.getResultProbability(rankValueDistribution, opponentRankValueDistribution))
 
-    print("接下来输入五张公开牌中的第四张")
+
+    # 第三阶段
+    print("\n接下来输入五张公开牌中的第四张")
     inputACard("输入第4张公开牌。", cardsForSelection)
     
     rankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection), [], fiveCardsDf, fiveCardRankDict)
     opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection[2:]), cardsForSelection[0:2], fiveCardsDf, fiveCardRankDict)
     rankValueDistributionDict = {'me':rankValueDistribution, 'opponent':opponentRankValueDistribution}
+
+    printInputedCard(cardsForSelection)
     srvd.showRankValueDistribution(rankValueDistributionDict, axes[1,0], bucketSize, baselineBucketCountDict)
     print(srvd.getResultProbability(rankValueDistribution, opponentRankValueDistribution))
 
-    print("最后输入五张公开牌中的第五张")
+
+    # 第四阶段
+    print("\n最后输入五张公开牌中的第五张")
     inputACard("输入第5张公开牌。", cardsForSelection)
 
     rankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection), [], fiveCardsDf, fiveCardRankDict)
     opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection[2:]), cardsForSelection[0:2], fiveCardsDf, fiveCardRankDict)
     rankValueDistributionDict = {'me':rankValueDistribution, 'opponent':opponentRankValueDistribution}
+
+    printInputedCard(cardsForSelection)
     srvd.showRankValueDistribution(rankValueDistributionDict, axes[1,1], bucketSize, baselineBucketCountDict)
     print(srvd.getResultProbability(rankValueDistribution, opponentRankValueDistribution))
 
-    print("七张牌中可选的的组合中最大的排位为"+str(rankValueDistribution)+"/6191.")
+    # print("七张牌中可选的的组合中最大的排位为"+str(rankValueDistribution)+"/6191.")
 
     end = False
     while end is False:

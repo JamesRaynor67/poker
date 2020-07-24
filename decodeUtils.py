@@ -1,22 +1,28 @@
 # -*- coding: utf-8 -*-
 
-def printCards(Cards):
+def printUnicodeCards(Cards):
     cardType = ["♠", "♥", "♦", "♣"]
+    unicodeCards = []
     for card in Cards:
         cardValue = card//4
         if cardValue < 9:
-            print(cardType[card%4] + str(cardValue+2), end=" ")
+            unicodeCards.append(cardType[card%4] + str(cardValue+2))
         elif cardValue == 9:
-            print(cardType[card%4] + 'J', end=" ")
+            unicodeCards.append(cardType[card%4] + 'J')
         elif cardValue == 10:
-            print(cardType[card%4] + 'Q', end=" ")
+            unicodeCards.append(cardType[card%4] + 'Q')
         elif cardValue == 11:
-            print(cardType[card%4] + 'K', end=" ")
+            unicodeCards.append(cardType[card%4] + 'K')
         elif cardValue == 12:
-            print(cardType[card%4] + 'A', end=" ")
+            unicodeCards.append(cardType[card%4] + 'A')
         else:
-            print("error!" + str(card))
-    print(" (" + str(Cards) + ")")
+            print("error!" + str(Cards))
+            return []
+    
+    resultStr = ""
+    for unicodeCard in unicodeCards:
+        resultStr += (str(unicodeCard) + ' ')
+    return resultStr
 
 
 def decodeSevenCardId(sevenCardId):
@@ -33,7 +39,7 @@ def decodeFiveCardId(fiveCardId):
         cardIntList[i] = (fiveCardId % 52)
         fiveCardId = fiveCardId // 52
     return cardIntList
-    
+
 
 def readableCardsToCardsInt(readAbleCards):
     # cardType = ["♠", "♥", "♦", "♣"]

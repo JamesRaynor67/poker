@@ -56,8 +56,8 @@ def getRankValueDistribution(cardsForSelection, bannedCards, rankDf, fiveCardRan
         sevenCards.append(sevenCard)
 
     print(len(sevenCards))
-    if len(sevenCards) > 1000000:
-        sampledSevenCards = random.sample(sevenCards, k=1000000)
+    if len(sevenCards) > 100000:
+        sampledSevenCards = random.sample(sevenCards, k=100000)
         for sevenCard in sampledSevenCards:
             # _, maxCardValue = selectBestFiveOutOfSeven_bySort(sevenCard, rankDf)
             maxCardValue = selectBestFiveOutOfSeven_byLookingUp(sevenCard, fiveCardRankDict)
