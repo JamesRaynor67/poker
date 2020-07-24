@@ -74,7 +74,43 @@ def showRankValueDistribution(rankValueDistributionDict, ax, bucketSize, baselin
     # print(df)
 
 
+def getResultProbability(myRankValueDistribution, targetRankValueDistribution):
+    
+    # print('Calculate counter')
+    myCountDict = dict(Counter(myRankValueDistribution))
+    targetCountDict = dict(Counter(targetRankValueDistribution))
+    # print('Calculate counter, done')
 
+    # print('Calculate each rankValue probability')
+    myRankValueProbability = []
+    targetRankValueProbability = []
+    myRankValueSampleSpaceSize = len(myRankValueDistribution)
+    targetRankValueSampleSpaceSize = len(targetRankValueDistribution)
+    for rankValue, frequency in myCountDict.items():
+        myRankValueProbability.append([rankValue, frequency/myRankValueSampleSpaceSize])
+    for rankValue, frequency in targetCountDict.items():
+        targetRankValueProbability.append([rankValue, frequency/targetRankValueSampleSpaceSize])
+    # print('Calculate each rankValue probability')
+
+    myRankValueProbability.sort(key=lambda x:x[0])
+    targetRankValueProbability.sort(key=lambda x:x[0])
+
+    # print(len(myRankValueProbability))
+    # print('Calcuate win/draw probability')
+    
+    # 通过计算累进概率可以进一步优化下面的概率计算，但是数组长度最多6192，就不过度优化了
+    winRate = 0
+    drawRate = 0
+    for myRank in myRankValueProbability:
+        for targetRank in targetRankValueProbability:
+            if targetRank[0] > myRank[0]:
+                break
+            elif targetRank[0] == myRank[0]:
+                drawRate += targetRank[1]*myRank[1]
+            else:
+                winRate += targetRank[1]*myRank[1]
+                
+    return {'winRate':winRate, 'drawRate':drawRate, 'lossRate': 1.0-winRate-drawRate}
 
 # _, ax = plt.subplots(2, 2, figsize=(7, 7), sharex=True)
 # #d={'baseline':random.choices(range(3000, 3500),k=5000)}

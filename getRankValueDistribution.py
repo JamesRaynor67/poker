@@ -99,4 +99,3 @@ if __name__ == "__main__":
     cardsForSelectionTest = ["H3", "SK", "D2", "D9", "CJ"]
     bannedCards = []
     rankValueDistribution = getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelectionTest), bannedCards, fiveCardsDf)
-    printRankValueDistribution(rankValueDistribution)

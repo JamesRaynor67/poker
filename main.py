@@ -66,6 +66,7 @@ if __name__ == "__main__":
     opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection[2:]), cardsForSelection[0:2], fiveCardsDf)
     rankValueDistributionDict = {'me':rankValueDistribution, 'opponent':opponentRankValueDistribution}
     srvd.showRankValueDistribution(rankValueDistributionDict, axes[0,1], bucketSize, baselineBucketCountDict)
+    print(srvd.getResultProbability(rankValueDistribution, opponentRankValueDistribution))
 
     print("接下来输入五张公开牌中的第四张")
     inputACard("输入第4张公开牌。", cardsForSelection)
@@ -74,6 +75,7 @@ if __name__ == "__main__":
     opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection[2:]), cardsForSelection[0:2], fiveCardsDf)
     rankValueDistributionDict = {'me':rankValueDistribution, 'opponent':opponentRankValueDistribution}
     srvd.showRankValueDistribution(rankValueDistributionDict, axes[1,0], bucketSize, baselineBucketCountDict)
+    print(srvd.getResultProbability(rankValueDistribution, opponentRankValueDistribution))
 
     print("最后输入五张公开牌中的第五张")
     inputACard("输入第5张公开牌。", cardsForSelection)
@@ -82,6 +84,7 @@ if __name__ == "__main__":
     opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection[2:]), cardsForSelection[0:2], fiveCardsDf)
     rankValueDistributionDict = {'me':rankValueDistribution, 'opponent':opponentRankValueDistribution}
     srvd.showRankValueDistribution(rankValueDistributionDict, axes[1,1], bucketSize, baselineBucketCountDict)
+    print(srvd.getResultProbability(rankValueDistribution, opponentRankValueDistribution))
 
     print("七张牌中可选的的组合中最大的排位为"+str(rankValueDistribution)+"/6191.")
 
