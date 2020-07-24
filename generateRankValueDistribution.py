@@ -21,6 +21,8 @@ def generateTwoCardRankValueDistribution():
     fiveCardsDf = gfcrldf.getFiveCardRankListDf()
     sevenCardsDf = gscrldf.getSevenCardRankListDf(fiveCardsDf)
     sevenCardsRankDict = sevenCardsDf.to_dict()['rankValue']
+    
+    # Seems doesn't work, don't know why
     fiveCardsDf, sevenCardsDf = None, None
     del fiveCardsDf
     del sevenCardsDf
@@ -30,7 +32,6 @@ def generateTwoCardRankValueDistribution():
     for twoCard in itertools.combinations_with_replacement(range(12,-1,-1), 2):
         twoCards.append(list(twoCard))
     print(len(twoCards))
-
 
 
     rankValueList = list(range(6192))
@@ -67,6 +68,27 @@ def generateTwoCardRankValueDistribution():
 
     df.set_index('rankValue', inplace=True)
     df.to_csv('twoCardRankValueDistribution.zip', compression="zip")
+
+
+def generateBaselineRankValueDistribution():
+    fiveCardsDf = gfcrldf.getFiveCardRankListDf()
+    sevenCardsDf = gscrldf.getSevenCardRankListDf(fiveCardsDf)
+    sevenCardsRankList = sevenCardsDf.to_list()['rankValue']
+    sevenCardsRankCount = Counter(sevenCardsRankList)
+
+    rankValueList = list(range(6192))
+    df = pd.DataFrame(rankValueList, columns=['rankValue'])
+
+    sevenCardRankValueDistribution = []
+    for rankValue in rankValueList:
+        if rankValue in sevenCardsRankCount:
+            sevenCardRankValueDistribution.append(sevenCardsRankCount[rankValue])
+        else:
+            sevenCardRankValueDistribution.append(0)
+    
+    df['baselineRankValueCount'] = sevenCardRankValueDistribution
+    df.set_index('rankValue', inplace=True)
+    df.to_csv('baselineRankValueDistribution.csv')
 
 
 if __name__ == '__main__':
