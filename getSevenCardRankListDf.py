@@ -10,15 +10,17 @@ import patternCompareUtils as pcu
 import getRankValueDistribution as grvd
 import getFiveCardRankListDf as gfcrldf
 import pandas as pd
+from collections import Counter
 
 
 def sevenCardsToID(sevenCard):
     return sevenCard[0] + sevenCard[1]*52 + sevenCard[2]*(52**2) + sevenCard[3]*(52**3) + sevenCard[4]*(52**4) + sevenCard[5]*(52**5) + sevenCard[6]*(52**6)
 
+
 def getSevenCardRankListDf(fiveCardRankListDf):
-    if os.path.exists('sevenCardRankList.csv'):
-        print("Reading from sevenCardRankList.csv ...")
-        df = pd.read_csv('sevenCardRankList.csv')
+    if os.path.exists('sevenCardRankList.zip'):
+        print("Reading from sevenCardRankList.zip ...")
+        df = pd.read_csv('sevenCardRankList.zip', compression='zip', sep=',')
         df.set_index('id', inplace=True)
         return df
     else:
@@ -46,8 +48,19 @@ def getSevenCardRankListDf(fiveCardRankListDf):
         sevenCardRankList = None # High memory is required ahead, make it availble to free memory
         df.set_index('id', inplace=True)
 
-        df.to_csv('sevenCardRankList.csv')
+        print('Saving file as zip, it may take sometime')
+        df.to_csv('sevenCardRankList.zip', compression="zip")
         return df
+
+
+def getBaselineBucketCountDict(sevenCardRankListDf, bucketSize):
+    sevenCardRankValueDistribution = sevenCardRankListDf['rankValue'].tolist()
+    print('正在处理随机抽牌背景概率...')
+    bucket = [rankValue//bucketSize for rankValue in sevenCardRankValueDistribution]
+    bucketCountDict = dict(Counter(bucket))
+    print('随机抽牌背景概率处理完成')
+    return bucketCountDict
+    
 
 if __name__ == '__main__':
     fiveCardRankListDf = gfcrldf.getFiveCardRankListDf()

@@ -5,10 +5,11 @@ import itertools
 import functools
 import time
 import getFiveCardRankListDf as gfcrldf
+import getSevenCardRankListDf as gscrldf
 import patternCompareUtils as pcu
 import decodeUtils as du
 import seaborn as sns
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 def selectBestFiveOutOfSeven_bySort(sevenCard, rankDf):
     # 进一步的优化方式是针对所有7张的组合打一张表，可以直接查出maxRankValue
@@ -40,7 +41,6 @@ def selectBestFiveOutOfSeven_byLookingUp(sevenCard, rankDict):
     return maxRankValue
 
 
-
 def getRankValueDistribution(cardsForSelection, bannedCards, rankDf):
     # 输入的为两个list和一个df
     allCardsSet = set(list(range(52))) # 可以考虑转为全局变量
@@ -68,21 +68,6 @@ def getRankValueDistribution(cardsForSelection, bannedCards, rankDf):
             rankValueDistribution.append(maxCardValue)
     return rankValueDistribution
 
-
-def printRankValueDistribution(rankValueDistribution, role, enableKde = True, ax = None, showPlot=True):
-
-    if role == 'opponent':
-        sns.distplot(rankValueDistribution, bins=200, color='r', kde=enableKde)
-        plt.xlim([-1, 6170])
-    elif role == 'me':
-        sns.distplot(rankValueDistribution, bins=200, color='b', kde=enableKde)
-        plt.xlim([-1, 6170])
-    elif role == 'baseline':
-        sns.distplot(rankValueDistribution, bins=200, color='g', kde=enableKde)
-        plt.xlim([-1, 6170])
-
-    if showPlot is True:
-        plt.show()
 
 
 if __name__ == "__main__":
