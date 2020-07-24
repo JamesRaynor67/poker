@@ -42,6 +42,7 @@ if __name__ == "__main__":
 
     print(matplotlib.get_backend())
     fiveCardsDf = gfcrldf.getFiveCardRankListDf()
+    fiveCardRankDict = fiveCardsDf.to_dict()['rankValue']
     # sevenCardsDf = gscrldf.getSevenCardRankListDf(fiveCardsDf)
     # baselineBucketCountDict = gscrldf.getBaselineBucketCountDict(sevenCardsDf, bucketSize)
     baselineBucketCountDict = None
@@ -51,7 +52,7 @@ if __name__ == "__main__":
     inputACard("输入第1张底牌。", cardsForSelection)
     inputACard("输入第2张底牌。", cardsForSelection)
 
-    rankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection), [], fiveCardsDf)
+    rankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection), [], fiveCardsDf, fiveCardRankDict)
     # opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt([]), cardsForSelection[0:2], fiveCardsDf) 不确定性太大，需要提前计算
     rankValueDistributionDict = {'me':rankValueDistribution}
     srvd.showRankValueDistribution(rankValueDistributionDict, axes[0,0], bucketSize, baselineBucketCountDict)
@@ -62,8 +63,8 @@ if __name__ == "__main__":
     inputACard("首先输入第2张公开牌。", cardsForSelection)
     inputACard("首先输入第3张公开牌。", cardsForSelection)
 
-    rankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection), [], fiveCardsDf)
-    opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection[2:]), cardsForSelection[0:2], fiveCardsDf)
+    rankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection), [], fiveCardsDf, fiveCardRankDict)
+    opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection[2:]), cardsForSelection[0:2], fiveCardsDf, fiveCardRankDict)
     rankValueDistributionDict = {'me':rankValueDistribution, 'opponent':opponentRankValueDistribution}
     srvd.showRankValueDistribution(rankValueDistributionDict, axes[0,1], bucketSize, baselineBucketCountDict)
     print(srvd.getResultProbability(rankValueDistribution, opponentRankValueDistribution))
@@ -71,8 +72,8 @@ if __name__ == "__main__":
     print("接下来输入五张公开牌中的第四张")
     inputACard("输入第4张公开牌。", cardsForSelection)
     
-    rankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection), [], fiveCardsDf)
-    opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection[2:]), cardsForSelection[0:2], fiveCardsDf)
+    rankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection), [], fiveCardsDf, fiveCardRankDict)
+    opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection[2:]), cardsForSelection[0:2], fiveCardsDf, fiveCardRankDict)
     rankValueDistributionDict = {'me':rankValueDistribution, 'opponent':opponentRankValueDistribution}
     srvd.showRankValueDistribution(rankValueDistributionDict, axes[1,0], bucketSize, baselineBucketCountDict)
     print(srvd.getResultProbability(rankValueDistribution, opponentRankValueDistribution))
@@ -80,8 +81,8 @@ if __name__ == "__main__":
     print("最后输入五张公开牌中的第五张")
     inputACard("输入第5张公开牌。", cardsForSelection)
 
-    rankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection), [], fiveCardsDf)
-    opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection[2:]), cardsForSelection[0:2], fiveCardsDf)
+    rankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection), [], fiveCardsDf, fiveCardRankDict)
+    opponentRankValueDistribution = grvd.getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelection[2:]), cardsForSelection[0:2], fiveCardsDf, fiveCardRankDict)
     rankValueDistributionDict = {'me':rankValueDistribution, 'opponent':opponentRankValueDistribution}
     srvd.showRankValueDistribution(rankValueDistributionDict, axes[1,1], bucketSize, baselineBucketCountDict)
     print(srvd.getResultProbability(rankValueDistribution, opponentRankValueDistribution))

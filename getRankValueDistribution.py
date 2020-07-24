@@ -26,7 +26,7 @@ def selectBestFiveOutOfSeven_bySort(sevenCard, rankDf):
     return maxFiveCardId, rankDf.loc[maxFiveCardId]['rankValue']
 
 
-def selectBestFiveOutOfSeven_byLookingUp(sevenCard, rankDict):
+def selectBestFiveOutOfSeven_byLookingUp(sevenCard, fiveCardRankDict):
     # 输入是一个长度为7的int list, 我们需要确保其排序为降序 e.g. [50,35,23,21,19,12,3]
     # 考虑仅将这个函数用于快速生成7张的战力列表
     assert sevenCard[0] > sevenCard[1] and sevenCard[1] > sevenCard[2] and sevenCard[2] > sevenCard[3] and sevenCard[3] > sevenCard[4] and sevenCard[4] > sevenCard[5] and sevenCard[5] > sevenCard[6], "The input sevenCard list should be sorted in desending way" + str(sevenCard)
@@ -34,14 +34,14 @@ def selectBestFiveOutOfSeven_byLookingUp(sevenCard, rankDict):
     maxRankValue = -1
     for fiveCard in itertools.combinations(sevenCard, 5):
         fiveCardId = gfcrldf.fiveCardsToID(list(fiveCard))
-        rankValue = rankDict[fiveCardId]
+        rankValue = fiveCardRankDict[fiveCardId]
         if maxRankValue < rankValue:
             maxRankValue = rankValue
     
     return maxRankValue
 
 
-def getRankValueDistribution(cardsForSelection, bannedCards, rankDf):
+def getRankValueDistribution(cardsForSelection, bannedCards, rankDf, fiveCardRankDict):
     # 输入的为两个list和一个df
     allCardsSet = set(list(range(52))) # 可以考虑转为全局变量
     rankValueDistribution = []
@@ -56,15 +56,16 @@ def getRankValueDistribution(cardsForSelection, bannedCards, rankDf):
         sevenCards.append(sevenCard)
 
     print(len(sevenCards))
-    if len(sevenCards) > 10000:
-        sampledSevenCards = random.sample(sevenCards, k=10000)
+    if len(sevenCards) > 1000000:
+        sampledSevenCards = random.sample(sevenCards, k=1000000)
         for sevenCard in sampledSevenCards:
-            _, maxCardValue = selectBestFiveOutOfSeven_bySort(sevenCard, rankDf)
+            # _, maxCardValue = selectBestFiveOutOfSeven_bySort(sevenCard, rankDf)
+            maxCardValue = selectBestFiveOutOfSeven_byLookingUp(sevenCard, fiveCardRankDict)
             rankValueDistribution.append(maxCardValue)
     else:
-        selectBestFiveOutOfSeven_bySort(sevenCard,rankDf)
         for sevenCard in sevenCards:
-            _, maxCardValue = selectBestFiveOutOfSeven_bySort(sevenCard, rankDf)
+            # _, maxCardValue = selectBestFiveOutOfSeven_bySort(sevenCard, rankDf)
+            maxCardValue = selectBestFiveOutOfSeven_byLookingUp(sevenCard, fiveCardRankDict)
             rankValueDistribution.append(maxCardValue)
     return rankValueDistribution
 
