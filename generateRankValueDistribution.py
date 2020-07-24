@@ -12,6 +12,7 @@ import time
 import itertools
 from collections import Counter
 import pandas as pd
+import gc
 
 def generateTwoCardRankValueDistribution():
     # 因为仅仅两张牌，且德州扑克不考虑花色，为减少重复计算故仅仅
@@ -21,6 +22,9 @@ def generateTwoCardRankValueDistribution():
     sevenCardsDf = gscrldf.getSevenCardRankListDf(fiveCardsDf)
     sevenCardsRankDict = sevenCardsDf.to_dict()['rankValue']
     fiveCardsDf, sevenCardsDf = None, None
+    del fiveCardsDf
+    del sevenCardsDf
+    gc.collect()
 
     twoCards = []
     for twoCard in itertools.combinations_with_replacement(range(12,-1,-1), 2):
@@ -35,8 +39,8 @@ def generateTwoCardRankValueDistribution():
     for twoCard in twoCards:
         includeTwoCardRankValueDistribution = []
         excludeTwoCardRankValueDistribution = []
-        includeTwoCardId = 'include_'+str(twoCard[0] + twoCard[1]*13)
-        excludeTwoCardId = 'exclude_'+str(twoCard[0] + twoCard[1]*13)
+        includeTwoCardId = 'include_' + str(twoCard[0] + twoCard[1]*13)
+        excludeTwoCardId = 'exclude_' + str(twoCard[0] + twoCard[1]*13)
 
         includeRankValueCountDict = dict(zip(range(6192),[0]*6192))
         excludeRankValueCountDict = dict(zip(range(6192),[0]*6192))
@@ -60,7 +64,6 @@ def generateTwoCardRankValueDistribution():
         df[includeTwoCardId] = includeTwoCardRankValueDistribution
         df[excludeTwoCardId] = excludeTwoCardRankValueDistribution
 
-        break # For test only
 
     df.set_index('rankValue', inplace=True)
     df.to_csv('twoCardRankValueDistribution.zip', compression="zip")
