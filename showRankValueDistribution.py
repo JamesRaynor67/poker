@@ -23,9 +23,9 @@ def showRankValueDistribution(rankValueDistributionDict, ax, bucketSize, resultP
         totalCount = 0
         
         # 将rankValue粒度提升便于绘图
-        bucketCountDict = dict(zip(range(6191//bucketSize+1), [0]*(6191//bucketSize+1)))
+        bucketCountDict = dict(zip(range(7462//bucketSize+1), [0]*(7462//bucketSize+1)))
         for rankValue in rankValueDistribution:
-            bucketCountDict[rankValue//52] += rankValueDistribution[rankValue]
+            bucketCountDict[rankValue//bucketSize] += rankValueDistribution[rankValue]
             totalCount += rankValueDistribution[rankValue]
         
         # 计算每个非零的桶的概率，化为点后排序
@@ -43,21 +43,11 @@ def showRankValueDistribution(rankValueDistributionDict, ax, bucketSize, resultP
         if max(yList)*1.05 > y_lim:
             y_lim = max(yList) * 1.05
 
-    # 加若干竖线将不同牌型区分开:
-        # StraightFlush = 8
-        # FourofAKind = 7
-        # FullHouse = 6
-        # Flush = 5
-        # Straight = 4
-        # ThreeofAKind = 3
-        # TwoPair = 2
-        # OnePair = 1
-        # NoPair = 0
-    # xList.append()
+
 
     df = pd.DataFrame(zip(xList, yList, roleList), columns=['CardRank', 'Probability', 'role'])
     sns.lineplot(x="CardRank", y="Probability", hue="role", style='role', estimator=None, data=df, ax=ax, alpha=0.8)
-    ax.set(xlim=(0, 6200))
+    ax.set(xlim=(0, 7465))
     ax.set(ylim=(0, y_lim))
 
     if isinstance(resultProbability, dict) and 'win' in resultProbability and 'draw' in resultProbability and 'loss' in resultProbability:
@@ -90,7 +80,7 @@ def showMaxRankProbability(myRankValueProbabilityDist, opponentRankValueProbabil
     accumulateProbability = 0
     xRankValueList.append(-0.001)
     yProbabilityList.append(0)
-    for xRankValue in range(6191):
+    for xRankValue in range(7462):
         xRankValueList.append(xRankValue)
         if xRankValue in myRankValueProbabilityDistDict:
             accumulateProbability += myRankValueProbabilityDistDict[xRankValue]
@@ -100,16 +90,66 @@ def showMaxRankProbability(myRankValueProbabilityDist, opponentRankValueProbabil
     accumulateProbability = 0
     xRankValueList.append(-0.001)
     yProbabilityList.append(0)
-    for xRankValue in range(6191):
+    for xRankValue in range(7462):
         xRankValueList.append(xRankValue)
         if xRankValue in opponentRankValueProbabilityDistDict:
             accumulateProbability += opponentRankValueProbabilityDistDict[xRankValue]
         yProbabilityList.append(accumulateProbability)
         roleList.append('opponent')
 
-    df = pd.DataFrame(zip(xRankValueList, yProbabilityList, roleList), columns=['x', 'y', 'role'])
+    # 加若干竖线将不同牌型区分开:
+        # StraightFlush = 8
+        # FourofAKind = 7
+        # FullHouse = 6
+        # Flush = 5
+        # Straight = 4
+        # ThreeofAKind = 3
+        # TwoPair = 2
+        # OnePair = 1
+        # NoPair = 0
+        # 15064571,1278 ♣5 ♣4 ♣3 ♣2 ♦2  ([15, 11, 7, 3, 2])
+        # 15061655,4138 ♣4 ♣3 ♦3 ♣2 ♦2  ([11, 7, 6, 3, 2])
+        # 7601319,4996 ♣4 ♣3 ♣2 ♦2 ♥2  ([11, 7, 3, 2, 1])
+        # 15638031,5854 ♣6 ♣5 ♣4 ♣3 ♦2  ([19, 15, 11, 7, 2])
+        # 22949651,5863 ♣7 ♣5 ♣4 ♣3 ♣2  ([23, 15, 11, 7, 3])
+        # 7601263,7141 ♣3 ♦3 ♣2 ♦2 ♥2  ([7, 6, 3, 2, 1])
+        # 146179,7297 ♣3 ♣2 ♦2 ♥2 ♠2  ([7, 3, 2, 1, 0])
+        # 22949647,7453 ♣6 ♣5 ♣4 ♣3 ♣2  ([19, 15, 11, 7, 3])
+    xRankValueList.append(1278), yProbabilityList.append(0), roleList.append('boundary')
+    xRankValueList.append(1278), yProbabilityList.append(1), roleList.append('boundary')
+    xRankValueList.append(1278.0001), yProbabilityList.append(0), roleList.append('boundary')
+
+    xRankValueList.append(4138), yProbabilityList.append(0), roleList.append('boundary')
+    xRankValueList.append(4138), yProbabilityList.append(1), roleList.append('boundary')
+    xRankValueList.append(4138.0001), yProbabilityList.append(0), roleList.append('boundary')
+
+    xRankValueList.append(4996), yProbabilityList.append(0), roleList.append('boundary')
+    xRankValueList.append(4996), yProbabilityList.append(1), roleList.append('boundary')
+    xRankValueList.append(4996.0001), yProbabilityList.append(0), roleList.append('boundary')
+
+    xRankValueList.append(5854), yProbabilityList.append(0), roleList.append('boundary')
+    xRankValueList.append(5854), yProbabilityList.append(1), roleList.append('boundary')
+    xRankValueList.append(5854.0001), yProbabilityList.append(0), roleList.append('boundary')
+
+    xRankValueList.append(5863), yProbabilityList.append(0), roleList.append('boundary')
+    xRankValueList.append(5863), yProbabilityList.append(1), roleList.append('boundary')
+    xRankValueList.append(5863.0001), yProbabilityList.append(0), roleList.append('boundary')
+
+    xRankValueList.append(7141), yProbabilityList.append(0), roleList.append('boundary')
+    xRankValueList.append(7141), yProbabilityList.append(1), roleList.append('boundary')
+    xRankValueList.append(7141.0001), yProbabilityList.append(0), roleList.append('boundary')
+
+    xRankValueList.append(7297), yProbabilityList.append(0), roleList.append('boundary')
+    xRankValueList.append(7297), yProbabilityList.append(1), roleList.append('boundary')
+    xRankValueList.append(7297.0001), yProbabilityList.append(0), roleList.append('boundary')
+
+    xRankValueList.append(7453), yProbabilityList.append(0), roleList.append('boundary')
+    xRankValueList.append(7453), yProbabilityList.append(1), roleList.append('boundary')
+    xRankValueList.append(7453.0001), yProbabilityList.append(0), roleList.append('boundary')
+
+    df = pd.DataFrame(zip(xRankValueList, yProbabilityList, roleList), columns=['CardRank', 'Probability', 'role'])
     sns.lineplot(x="CardRank", y="Probability", hue="role", style='role', estimator=None, data=df, ax=ax, alpha=0.8)
-    ax.set(xlim=(0, 6200))
+    ax.set(xlim=(0, 7465))
     ax.set(ylim=(0, 1.0))
 
 
@@ -145,9 +185,3 @@ def getResultProbability(myCountDict, targetCountDict):
                 winRate += targetRank[1]*myRank[1]
 
     return {'win':float(winRate), 'draw':float(drawRate), 'loss': 1-float(winRate+drawRate)}, myRankValueProbability, targetRankValueProbability
-
-# _, ax = plt.subplots(2, 2, figsize=(7, 7), sharex=True)
-# #d={'baseline':random.choices(range(3000, 3500),k=5000)}
-# d={'me':rankValueDistribution, 'baseline':random.choices(range(3000, 3500),k=5000), 'opponent':random.choices(range(2000, 3500),k=5000)}
-
-# drawRankValueDistribution(d, ax)

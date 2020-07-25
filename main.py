@@ -44,7 +44,7 @@ def printInputedCard(inputedCards):
 
 
 if __name__ == "__main__":
-    bucketSize = 51
+    bucketSize = 82
     twoCardsDf = prvdc.getTwoCardRankValueDistributionCountDf()
     fiveCardsDf = gfcrldf.getFiveCardRankListDf()
     fiveCardRankDict = fiveCardsDf.to_dict()['rankValue']

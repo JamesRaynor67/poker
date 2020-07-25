@@ -287,7 +287,7 @@ def compareTwoSuits(suit1, suit2):
         return 1
     elif flush1 is True and flush2 is True:
         for i in range(5):
-            if singleCardIntList1[i]//4 != singleCardIntList2[i]//4:
+            if singleCardIntList1[i]//4 != singleCardIntList2[i]//4: #不应受到花色影响，故除以4后比较
                 return singleCardIntList1[i]//4 - singleCardIntList2[i]//4 #不应受到花色影响，故除以4后比较
         return 0
 
