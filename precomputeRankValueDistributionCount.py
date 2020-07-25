@@ -42,8 +42,8 @@ def getTwoCardRankValueDistributionCountDf():
             includeTwoCardId = 'include_' + str(twoCard[0] + twoCard[1]*13)
             excludeTwoCardId = 'exclude_' + str(twoCard[0] + twoCard[1]*13)
 
-            includeRankValueCountDict = dict(zip(range(max(fiveCardsDf['rankValue'].tolist())),[0]*max(fiveCardsDf['rankValue'].tolist())))
-            excludeRankValueCountDict = dict(zip(range(max(fiveCardsDf['rankValue'].tolist())),[0]*max(fiveCardsDf['rankValue'].tolist())))
+            includeRankValueCountDict = dict(zip(range(max(fiveCardsDf['rankValue'].tolist())+1),[0]*(max(fiveCardsDf['rankValue'].tolist())+1)))
+            excludeRankValueCountDict = dict(zip(range(max(fiveCardsDf['rankValue'].tolist())+1),[0]*(max(fiveCardsDf['rankValue'].tolist())+1)))
 
             print(twoCard)
             for sevenCardId in sevenCardsRankDict:
