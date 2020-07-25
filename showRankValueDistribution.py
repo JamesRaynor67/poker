@@ -53,7 +53,7 @@ def showRankValueDistribution(rankValueDistributionDict, ax, bucketSize, resultP
         # TwoPair = 2
         # OnePair = 1
         # NoPair = 0
-    xList.append()
+    # xList.append()
 
     df = pd.DataFrame(zip(xList, yList, roleList), columns=['CardRank', 'Probability', 'role'])
     sns.lineplot(x="CardRank", y="Probability", hue="role", style='role', estimator=None, data=df, ax=ax, alpha=0.8)
