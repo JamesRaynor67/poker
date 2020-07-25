@@ -15,7 +15,7 @@ import pandas as pd
 import gc
 import os
 
-def getTwoCardRankValueDistribution():
+def getTwoCardRankValueDistributionCountDf():
     # 因为仅仅两张牌，且德州扑克不考虑花色，为减少重复计算故仅仅
     # 在这个函数及生成的csv文件中考虑牌的值为 0,1...12,对应
     # cardInt为0,1..51
@@ -76,10 +76,10 @@ def getTwoCardRankValueDistribution():
     return df
 
 
-def getBaselineRankValueDistribution():
+def getBaselineRankValueDistributionCountDf():
     if os.path.exists('baselineRankValueDistribution.csv'):
-        print("Reading from baselineRankValueDistribution.csv ...")
-        df = pd.read_csv('baselineRankValueDistribution.csv', compression='zip', sep=',')
+        # print("Reading from baselineRankValueDistribution.csv ...")
+        df = pd.read_csv('baselineRankValueDistribution.csv')
         df.set_index('rankValue', inplace=True)
     else:
         print('baselineRankValueDistribution.csv not found, start generating and it may take a long time and a lot of memory')
@@ -103,7 +103,15 @@ def getBaselineRankValueDistribution():
         df.to_csv('baselineRankValueDistribution.csv')
     return df
 
+
+def getTwoCardRankValueDistributionCountDict(twoCardDf, twoCard):
+    twoCardInt = du.readableCardsToCardsInt(twoCard)
+    twoCardInt.sort(reverse=True)
+    cardId = (twoCardInt[0]//13) + (twoCardInt[1]//13)*13
+    return twoCardDf.to_dict()['include_' + str(cardId)], twoCardDf.to_dict()['exclude_' + str(cardId)]
+
+
 if __name__ == '__main__':
     print('start')
-    print(getTwoCardRankValueDistribution())
-    print(getBaselineRankValueDistribution())
+    print(getTwoCardRankValueDistributionCountDf())
+    print(getBaselineRankValueDistributionCountDf())

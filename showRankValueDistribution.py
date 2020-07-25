@@ -5,6 +5,7 @@ from collections import Counter
 import functools
 import random
 import pandas as pd
+from decimal import Decimal
 
 def compareTwoPoints(p1, p2):
     if p1[0] != p2[0]:
@@ -13,45 +14,24 @@ def compareTwoPoints(p1, p2):
         return p1[1] - p2[1]
 
 
-def showRankValueDistribution(rankValueDistributionDict, ax, bucketSize, baselineBucketCountDict, resultProbability):
-    # bucketSize = 51 # Should be a factor of 6191+1
-    colorDict = {'opponent':'r', 'me':'b', 'baseline':'g'}
-    eps = 0.005
+def showRankValueDistribution(rankValueDistributionDict, ax, bucketSize, resultProbability):
     y_lim = -1
     yList = []
     xList = []
     roleList = []
     for role, rankValueDistribution in rankValueDistributionDict.items():
-        color = colorDict[role]
-        if role != 'baseline':
-            bucket = [rankValue//bucketSize for rankValue in rankValueDistribution]
-            bucketCountDict = dict(Counter(bucket))
-        else:
-            bucket = None
-            bucketCountDict = baselineBucketCountDict
-        points = []
+        totalCount = 0
+        
+        # 将rankValue粒度提升便于绘图
+        bucketCountDict = dict(zip(range(6191//bucketSize+1), [0]*(6191//bucketSize+1)))
+        for rankValue in rankValueDistribution:
+            bucketCountDict[rankValue//52] += rankValueDistribution[rankValue]
+            totalCount += rankValueDistribution[rankValue]
         
         # 计算每个非零的桶的概率，化为点后排序
-        totalCount = len(rankValueDistribution)
+        points = []
         for bucket_index, frequency in bucketCountDict.items():
             points.append([bucket_index, frequency/totalCount])
-        points.sort(key=functools.cmp_to_key(compareTwoPoints))
-
-        
-        extraPointsForPlot = []
-        for point in points:
-            # 遇到非零点，若左/右两边的bucket的值不存在(即为0)，则左/右插入一个0
-            if point[1] != 0:
-                leftPointX = point[0]-1
-                if leftPointX not in bucketCountDict:
-                    extraPointsForPlot.append([point[0]-eps, 0])
-                rightPointX = point[0]+1
-                if rightPointX not in bucketCountDict:
-                    extraPointsForPlot.append([point[0]+eps, 0])
-
-        # print(points)
-        # print(bucketCountDict)
-        points = points + extraPointsForPlot
         points.sort(key=functools.cmp_to_key(compareTwoPoints))
 
         # 转化为两个list，注意x轴的缩放
@@ -64,9 +44,7 @@ def showRankValueDistribution(rankValueDistributionDict, ax, bucketSize, baselin
             y_lim = max(yList) * 1.05
 
     df = pd.DataFrame(zip(xList, yList, roleList), columns=['x', 'y', 'role'])
-    # ax.set_xlim([0, 6200])
-    # ax.set_xlim([0, y_lim])
-    sns.lineplot(x="x", y="y", hue="role", estimator=None, data=df, ax=ax)
+    sns.lineplot(x="x", y="y", hue="role", style='role', estimator=None, data=df, ax=ax, alpha=0.8)
     ax.set(xlim=(0, 6200))
     ax.set(ylim=(0, y_lim))
 
@@ -119,27 +97,22 @@ def showMaxRankProbability(myRankValueProbabilityDist, opponentRankValueProbabil
 
     df = pd.DataFrame(zip(xRankValueList, yProbabilityList, roleList), columns=['x', 'y', 'role'])
     df.to_csv('debug.csv')
-    sns.lineplot(x="x", y="y", hue="role", estimator=None, data=df, ax=ax)
+    sns.lineplot(x="x", y="y", hue="role", style='role', estimator=None, data=df, ax=ax, alpha=0.8)
     ax.set(xlim=(0, 6200))
-    ax.set(ylim=(0, 1.05))
+    ax.set(ylim=(0, 1.0))
 
 
-def getResultProbability(myRankValueDistribution, targetRankValueDistribution):
-    
-    # print('Calculate counter')
-    myCountDict = dict(Counter(myRankValueDistribution))
-    targetCountDict = dict(Counter(targetRankValueDistribution))
-    # print('Calculate counter, done')
+def getResultProbability(myCountDict, targetCountDict):
 
     # print('Calculate each rankValue probability')
     myRankValueProbability = []
     targetRankValueProbability = []
-    myRankValueSampleSpaceSize = len(myRankValueDistribution)
-    targetRankValueSampleSpaceSize = len(targetRankValueDistribution)
+    myRankValueSampleSpaceSize = sum(myCountDict.values())
+    targetRankValueSampleSpaceSize = sum(targetCountDict.values())
     for rankValue, frequency in myCountDict.items():
-        myRankValueProbability.append([rankValue, frequency/myRankValueSampleSpaceSize])
+        myRankValueProbability.append([rankValue, Decimal(frequency)/Decimal(myRankValueSampleSpaceSize)])
     for rankValue, frequency in targetCountDict.items():
-        targetRankValueProbability.append([rankValue, frequency/targetRankValueSampleSpaceSize])
+        targetRankValueProbability.append([rankValue, Decimal(frequency)/Decimal(targetRankValueSampleSpaceSize)])
     # print('Calculate each rankValue probability')
 
     myRankValueProbability.sort(key=lambda x:x[0])
@@ -160,7 +133,7 @@ def getResultProbability(myRankValueDistribution, targetRankValueDistribution):
             else:
                 winRate += targetRank[1]*myRank[1]
 
-    return {'win':winRate, 'draw':drawRate, 'loss': 1.0-winRate-drawRate}, myRankValueProbability, targetRankValueProbability
+    return {'win':float(winRate), 'draw':float(drawRate), 'loss': float(Decimal(1)-winRate-drawRate)}, myRankValueProbability, targetRankValueProbability
 
 # _, ax = plt.subplots(2, 2, figsize=(7, 7), sharex=True)
 # #d={'baseline':random.choices(range(3000, 3500),k=5000)}

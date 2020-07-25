@@ -48,6 +48,9 @@ def getRankValueDistribution(cardsForSelection, bannedCards, rankDf, fiveCardRan
     
     # 求restOfCardToSelect，有至少两种方法
     restOfCardToSelect = list(allCardsSet - set(cardsForSelection) - set(bannedCards))
+    print(bannedCards)
+    print(restOfCardToSelect)
+    print(' ')
     sevenCards = []
     for restOfCardToSelect in itertools.combinations(restOfCardToSelect, 7-len(cardsForSelection)):
         # print(cardsForSelection)
@@ -55,16 +58,14 @@ def getRankValueDistribution(cardsForSelection, bannedCards, rankDf, fiveCardRan
         sevenCard.sort(reverse=True)
         sevenCards.append(sevenCard)
 
-    print(len(sevenCards))
-    if len(sevenCards) > 100000:
-        sampledSevenCards = random.sample(sevenCards, k=100000)
+    if len(sevenCards) > 300000:
+        print('This should never happen')
+        sampledSevenCards = random.sample(sevenCards, k=300000)
         for sevenCard in sampledSevenCards:
-            # _, maxCardValue = selectBestFiveOutOfSeven_bySort(sevenCard, rankDf)
             maxCardValue = selectBestFiveOutOfSeven_byLookingUp(sevenCard, fiveCardRankDict)
             rankValueDistribution.append(maxCardValue)
     else:
         for sevenCard in sevenCards:
-            # _, maxCardValue = selectBestFiveOutOfSeven_bySort(sevenCard, rankDf)
             maxCardValue = selectBestFiveOutOfSeven_byLookingUp(sevenCard, fiveCardRankDict)
             rankValueDistribution.append(maxCardValue)
     return rankValueDistribution
