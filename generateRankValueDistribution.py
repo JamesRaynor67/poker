@@ -85,7 +85,7 @@ def getBaselineRankValueDistribution():
         print('baselineRankValueDistribution.csv not found, start generating and it may take a long time and a lot of memory')
         fiveCardsDf = gfcrldf.getFiveCardRankListDf()
         sevenCardsDf = gscrldf.getSevenCardRankListDf(fiveCardsDf)
-        sevenCardsRankList = sevenCardsDf.tolist()['rankValue']
+        sevenCardsRankList = sevenCardsDf['rankValue'].tolist()
         sevenCardsRankCount = Counter(sevenCardsRankList)
 
         rankValueList = list(range(6192))
