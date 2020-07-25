@@ -27,19 +27,13 @@ def getTwoCardRankValueDistributionCountDf():
         fiveCardsDf = gfcrldf.getFiveCardRankListDf()
         sevenCardsDf = gscrldf.getSevenCardRankListDf(fiveCardsDf)
         sevenCardsRankDict = sevenCardsDf.to_dict()['rankValue']
-        
-        # Seems doesn't work, don't know why
-        fiveCardsDf, sevenCardsDf = None, None
-        del fiveCardsDf
-        del sevenCardsDf
-        gc.collect()
 
         twoCards = []
         for twoCard in itertools.combinations_with_replacement(range(12,-1,-1), 2):
             twoCards.append(list(twoCard))
         print(len(twoCards))
 
-        rankValueList = list(range(6192))
+        rankValueList = list(range(max(fiveCardsDf['rankValue'].tolist())))
         df = pd.DataFrame(rankValueList, columns=['rankValue'])
 
         for twoCard in twoCards:
@@ -48,8 +42,8 @@ def getTwoCardRankValueDistributionCountDf():
             includeTwoCardId = 'include_' + str(twoCard[0] + twoCard[1]*13)
             excludeTwoCardId = 'exclude_' + str(twoCard[0] + twoCard[1]*13)
 
-            includeRankValueCountDict = dict(zip(range(6192),[0]*6192))
-            excludeRankValueCountDict = dict(zip(range(6192),[0]*6192))
+            includeRankValueCountDict = dict(zip(range(max(fiveCardsDf['rankValue'].tolist())),[0]*max(fiveCardsDf['rankValue'].tolist())))
+            excludeRankValueCountDict = dict(zip(range(max(fiveCardsDf['rankValue'].tolist())),[0]*max(fiveCardsDf['rankValue'].tolist())))
 
             print(twoCard)
             for sevenCardId in sevenCardsRankDict:
@@ -87,7 +81,7 @@ def getBaselineRankValueDistributionCountDf():
         sevenCardsRankList = sevenCardsDf['rankValue'].tolist()
         sevenCardsRankCount = Counter(sevenCardsRankList)
 
-        rankValueList = list(range(6192))
+        rankValueList = list(range(max(fiveCardsDf['rankValue'].tolist())))
         df = pd.DataFrame(rankValueList, columns=['rankValue'])
 
         sevenCardRankValueDistribution = []
