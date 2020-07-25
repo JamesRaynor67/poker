@@ -289,7 +289,7 @@ def compareTwoSuits(suit1, suit2):
         for i in range(5):
             if singleCardIntList1[i] != singleCardIntList2[i]:
                 return singleCardIntList1[i]//4 - singleCardIntList2[i]//4 #不应受到花色影响，故除以4后比较
-            return 0
+        return 0
 
         
     fullHouse1, threeCardValue1, twoCardValue1 = isFullHouse(countItems1)

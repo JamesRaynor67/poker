@@ -43,8 +43,20 @@ def showRankValueDistribution(rankValueDistributionDict, ax, bucketSize, resultP
         if max(yList)*1.05 > y_lim:
             y_lim = max(yList) * 1.05
 
-    df = pd.DataFrame(zip(xList, yList, roleList), columns=['x', 'y', 'role'])
-    sns.lineplot(x="x", y="y", hue="role", style='role', estimator=None, data=df, ax=ax, alpha=0.8)
+    # 加若干竖线将不同牌型区分开:
+        # StraightFlush = 8
+        # FourofAKind = 7
+        # FullHouse = 6
+        # Flush = 5
+        # Straight = 4
+        # ThreeofAKind = 3
+        # TwoPair = 2
+        # OnePair = 1
+        # NoPair = 0
+    xList.append()
+
+    df = pd.DataFrame(zip(xList, yList, roleList), columns=['CardRank', 'Probability', 'role'])
+    sns.lineplot(x="CardRank", y="Probability", hue="role", style='role', estimator=None, data=df, ax=ax, alpha=0.8)
     ax.set(xlim=(0, 6200))
     ax.set(ylim=(0, y_lim))
 
@@ -96,8 +108,7 @@ def showMaxRankProbability(myRankValueProbabilityDist, opponentRankValueProbabil
         roleList.append('opponent')
 
     df = pd.DataFrame(zip(xRankValueList, yProbabilityList, roleList), columns=['x', 'y', 'role'])
-    df.to_csv('debug.csv')
-    sns.lineplot(x="x", y="y", hue="role", style='role', estimator=None, data=df, ax=ax, alpha=0.8)
+    sns.lineplot(x="CardRank", y="Probability", hue="role", style='role', estimator=None, data=df, ax=ax, alpha=0.8)
     ax.set(xlim=(0, 6200))
     ax.set(ylim=(0, 1.0))
 
