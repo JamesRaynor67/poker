@@ -48,9 +48,6 @@ def getRankValueDistribution(cardsForSelection, bannedCards, rankDf, fiveCardRan
     
     # 求restOfCardToSelect，有至少两种方法
     restOfCardToSelect = list(allCardsSet - set(cardsForSelection) - set(bannedCards))
-    print(bannedCards)
-    print(restOfCardToSelect)
-    print(' ')
     sevenCards = []
     for restOfCardToSelect in itertools.combinations(restOfCardToSelect, 7-len(cardsForSelection)):
         # print(cardsForSelection)

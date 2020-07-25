@@ -2,7 +2,6 @@
 
 import getFiveCardRankListDf as gfcrldf
 import getSevenCardRankListDf as gscrldf
-import getRankValueDistribution as grvd
 import showRankValueDistribution as srvd
 import decodeUtils as du
 import matplotlib.pyplot as plt

@@ -133,7 +133,7 @@ def getResultProbability(myCountDict, targetCountDict):
             else:
                 winRate += targetRank[1]*myRank[1]
 
-    return {'win':float(winRate), 'draw':float(drawRate), 'loss': float(Decimal(1)-winRate-drawRate)}, myRankValueProbability, targetRankValueProbability
+    return {'win':float(winRate), 'draw':float(drawRate), 'loss': 1-float(winRate+drawRate)}, myRankValueProbability, targetRankValueProbability
 
 # _, ax = plt.subplots(2, 2, figsize=(7, 7), sharex=True)
 # #d={'baseline':random.choices(range(3000, 3500),k=5000)}
