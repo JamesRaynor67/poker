@@ -55,6 +55,7 @@ def getRankValueDistribution(cardsForSelection, bannedCards, rankDf, fiveCardRan
         sevenCard.sort(reverse=True)
         sevenCards.append(sevenCard)
 
+    print(len(sevenCards))
     if len(sevenCards) > 300000:
         print('This should never happen')
         sampledSevenCards = random.sample(sevenCards, k=300000)
@@ -71,30 +72,6 @@ def getRankValueDistribution(cardsForSelection, bannedCards, rankDf, fiveCardRan
 
 if __name__ == "__main__":
     fiveCardsDf = gfcrldf.getFiveCardRankListDf()
-    # print(fiveCardsDf.head())
-    # print(fiveCardsDf.loc[350530283])
-    # testSevenCards = []
-    # for i in range(1000):
-    #     testSevenCard = random.sample(range(52), k=7)
-    #     testSevenCard.sort(reverse=True)
-    #     testSevenCards.append(testSevenCard)
-
-    # start = time.time()
-    # test_bySort = []
-    # for testSevenCard in testSevenCards:
-    #     test_bySort.append(selectBestFiveOutOfSeven_bySort(testSevenCard, df))
-    # end = time.time()
-    # print(end-start)
-
-    # test_byLookingUpList = []
-    # for testSevenCard in testSevenCards:
-    #     test_byLookingUpList.append(selectBestFiveOutOfSeven_byLookingUpList(testSevenCard, df))
-    # end = time.time()
-    # print(end-start)
-
-    # for suit in test:
-    #     printSuit(suit)
-    # cardsForSelectionTest = ["SA", "H3", "DQ", "D2", "D9"]
     cardsForSelectionTest = ["H3", "SK", "D2", "D9", "CJ"]
     bannedCards = []
     rankValueDistribution = getRankValueDistribution(du.readableCardsToCardsInt(cardsForSelectionTest), bannedCards, fiveCardsDf)
