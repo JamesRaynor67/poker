@@ -52,8 +52,8 @@ if __name__ == "__main__":
 
     end = False
     while end is False:
-        _, axes = plt.subplots(2, 4, figsize=(21, 7), sharex=True)
         plt.ion()
+        _, axes = plt.subplots(2, 4, figsize=(21, 7), sharex=True)
         sns.set(font_scale=0.8)
 
         resultProbability = None

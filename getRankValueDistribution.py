@@ -11,7 +11,7 @@ import decodeUtils as du
 import seaborn as sns
 # import matplotlib.pyplot as plt
 
-def selectBestFiveOutOfSeven_bySort(sevenCard, rankDf):
+def selectBestFiveOutOfSeven_bySort(sevenCard, fiveCardRankDict):
     # 进一步的优化方式是针对所有7张的组合打一张表，可以直接查出maxRankValue
     # 输入是一个长度为7的int list, 我们需要确保其排序为降序 e.g. [50,35,23,21,19,12,3]
     assert sevenCard[0] > sevenCard[1] and sevenCard[1] > sevenCard[2] and sevenCard[2] > sevenCard[3] and sevenCard[3] > sevenCard[4] and sevenCard[4] > sevenCard[5] and sevenCard[5] > sevenCard[6], "The input sevenCard list should be sorted in desending way" + str(sevenCard)
@@ -23,7 +23,7 @@ def selectBestFiveOutOfSeven_bySort(sevenCard, rankDf):
     fiveCards.sort(key=functools.cmp_to_key(pcu.compareTwoSuits))
     
     maxFiveCardId = gfcrldf.fiveCardsToID(fiveCards[-1])
-    return maxFiveCardId, rankDf.loc[maxFiveCardId]['rankValue']
+    return fiveCardRankDict[maxFiveCardId]
 
 
 def selectBestFiveOutOfSeven_byLookingUp(sevenCard, fiveCardRankDict):

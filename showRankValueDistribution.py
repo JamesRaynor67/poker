@@ -97,6 +97,9 @@ def showMaxRankProbability(myRankValueProbabilityDist, opponentRankValueProbabil
         yProbabilityList.append(accumulateProbability)
         roleList.append('opponent')
 
+    df = pd.DataFrame(zip(xRankValueList, yProbabilityList, roleList), columns=['CardRank', 'Probability', 'role'])
+    sns.lineplot(x="CardRank", y="Probability", hue="role", style='role', estimator=None, data=df, ax=ax, alpha=0.8)
+
     # 加若干竖线将不同牌型区分开:
         # StraightFlush = 8
         # FourofAKind = 7
@@ -115,6 +118,7 @@ def showMaxRankProbability(myRankValueProbabilityDist, opponentRankValueProbabil
         # 7601263,7141 ♣3 ♦3 ♣2 ♦2 ♥2  ([7, 6, 3, 2, 1])
         # 146179,7297 ♣3 ♣2 ♦2 ♥2 ♠2  ([7, 3, 2, 1, 0])
         # 22949647,7453 ♣6 ♣5 ♣4 ♣3 ♣2  ([19, 15, 11, 7, 3])
+    xRankValueList, yProbabilityList, roleList = [], [], []
     xRankValueList.append(1278), yProbabilityList.append(0), roleList.append('boundary')
     xRankValueList.append(1278), yProbabilityList.append(1), roleList.append('boundary')
     xRankValueList.append(1278.0001), yProbabilityList.append(0), roleList.append('boundary')
@@ -148,7 +152,9 @@ def showMaxRankProbability(myRankValueProbabilityDist, opponentRankValueProbabil
     xRankValueList.append(7453.0001), yProbabilityList.append(0), roleList.append('boundary')
 
     df = pd.DataFrame(zip(xRankValueList, yProbabilityList, roleList), columns=['CardRank', 'Probability', 'role'])
-    sns.lineplot(x="CardRank", y="Probability", hue="role", style='role', estimator=None, data=df, ax=ax, alpha=0.8)
+    g = sns.lineplot(x="CardRank", y="Probability", hue="role", style='role', estimator=None, data=df, ax=ax, alpha=0.6, palette="ch:2.5,.25")
+    g.legend_.remove()
+    
     ax.set(xlim=(0, 7465))
     ax.set(ylim=(0, 1.0))
 

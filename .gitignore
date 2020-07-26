@@ -3,3 +3,6 @@
 *.csv
 *.ipynb
 *.zip
+!fiveCardRankList.csv
+!twoCardRankValueDistribution.zip
+!baselineRankValueDistribution.csv
