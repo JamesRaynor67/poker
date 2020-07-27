@@ -4,13 +4,17 @@
 `python ./main.py`
 
 ### Explanation
-主要思路是将5张牌的所有情况转化为一个int，然后依据德州扑克的规则给每个int一个rankValue表示牌力大小，之后在计算过程中通过穷举+查表相对快速得出结果。
-同时，大半代码是为了预先计算csv/zip文件。真正的运行时代码较少。
+主要思路是将5张牌的所有情况转化为一个int (cardId)，然后依据德州扑克的规则给每个int一个rankValue表示牌力大小，之后在计算过程中通过穷举+查表相对快速得出结果。
+同时，大半代码是为了预先计算csv/zip文件，小部分为UI画图相关，真正的运行时代码较少。
 若是不慎删除了csv/zip文件，同样运行main.py文件可以自动生成。但是：
-* 生成fiveCardRankList.csv约30分钟，需要约1GB内存
-* 生成sevenCardRankList.csv约45分钟，需要约14GB内存
-* 生成twoCardRankValueDistribution.zip约4小时，需要约14GB内存
-* 生成baselineRankValueDistribution.csv约1分钟
+* 生成fiveCardRankList.csv约30分钟，需要约1GB内存。这个文件是主要使用的。
+* 生成sevenCardRankList.csv约45分钟，需要约14GB内存。这个文件主要是用于生成下面两个文件，运行时不加载。
+* 生成twoCardRankValueDistribution.zip约4小时，需要约14GB内存。这个文件是提前计算了我方拿到两张牌后我方/对方最后可能的7张牌中可选的5张牌的最大牌力的大小。
+* 生成baselineRankValueDistribution.csv约1分钟。这个文件计算了随机拿7张牌，牌力分布的概率情况。
+
+### Terms
+* cardId: 一副牌被映射到0,1,2...51, 那么任意5张牌/7张牌可以被表示为52进制下的一个数，以此用一个int存储5张牌以此进行快速查表等。
+* cardRank(牌力): 代表5张牌的大小, 0代表最弱, 2,3,4,5,7小于任何其它牌所以cardRank为0，由于德州扑克不考虑花色，所以有多个cardId的cardRank为0。接下来2,3,4,6,7的cardRank为1。最大的cardRank为同花10,J,Q,K,A的7461。
 
 ### Analysis
 1. 结果显示总共有7462种不同的牌力(等价类)
