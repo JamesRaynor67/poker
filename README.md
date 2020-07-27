@@ -8,7 +8,7 @@
 同时，大半代码是为了预先计算csv/zip文件，小部分为UI画图相关，真正的运行时代码较少。
 若是不慎删除了csv/zip文件，同样运行main.py文件可以自动生成。但是：
 * 生成fiveCardRankList.csv约30分钟，需要约1GB内存。这个文件是主要使用的。
-* 生成sevenCardRankList.csv约45分钟，需要约14GB内存。这个文件主要是用于生成下面两个文件，运行时不加载。
+* 生成sevenCardRankList.csv约45分钟，需要约14GB内存。这个文件主要是用于生成下面两个文件，运行时不加载。最后大小为806MB, 所以没有放到github上来。
 * 生成twoCardRankValueDistribution.zip约4小时，需要约14GB内存。这个文件是提前计算了我方拿到两张牌后我方/对方最后可能的7张牌中可选的5张牌的最大牌力的大小。
 * 生成baselineRankValueDistribution.csv约1分钟。这个文件计算了随机拿7张牌，牌力分布的概率情况。
 
